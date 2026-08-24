@@ -1,0 +1,776 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>A Little Birthday Scrapbook</title>
+    
+    <!-- Tải Font chữ từ Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&family=Cormorant+Garamond:wght@400;500;600;700&family=Great+Vibes&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        /* =========================================
+   1. KHAI BÁO BIẾN MÀU & THIẾT LẬP CHUNG
+========================================= */
+:root {
+    --blue: #3f5f9f;
+    --blue2: #7188b8;
+    --cream: #f5eddf;
+    --paper: #f7f0e3;
+    --aged: #e5d5bb;
+    --ink: #29364d;
+    --gold: #b99a62;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+    margin: 0;
+    color: var(--ink);
+    font-family: Lora, serif;
+    background: #dfe5ef;
+}
+
+/* Hiệu ứng nhiễu hạt giấy (Noise Overlay) */
+body:before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    pointer-events: none;
+    opacity: 0.1;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.8' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+button { font-family: "Be Vietnam Pro", sans-serif; }
+.hide { display: none !important; }
+
+
+/* =========================================
+   2. GIAO DIỆN MÀN HÌNH CHỜ (PHONG BÌ)
+========================================= */
+#intro {
+    min-height: 100svh;
+    display: grid;
+    place-items: center;
+    padding: 18px;
+    transition: opacity 0.55s, transform 0.55s;
+}
+
+.cover-envelope {
+    width: min(780px, 94vw);
+    min-height: 540px;
+    position: relative;
+    background: linear-gradient(145deg, #f4ead7, #e1ceb0);
+    border: 1px solid #b99a62aa;
+    box-shadow: 0 30px 90px #29364d38;
+    display: grid;
+    place-items: center;
+}
+
+.cover-envelope:before {
+    content: "";
+    position: absolute;
+    inset: 16px;
+    border: 1px solid #b99a6290;
+}
+
+.cover-inner {
+    text-align: center;
+    padding: 50px;
+    position: relative;
+    z-index: 2;
+}
+
+.eyebrow {
+    font: 11px "Be Vietnam Pro", sans-serif;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #50627f;
+}
+
+.cover-title {
+    font: 500 clamp(64px, 9vw, 100px) / 0.84 "Cormorant Garamond", serif;
+    color: var(--blue);
+    margin: 25px 0;
+}
+
+.cover-sub {
+    font-size: 20px;
+    line-height: 1.5;
+    max-width: 480px;
+    font-style: italic;
+}
+
+/* Con dấu sáp (nút mở) */
+.seal {
+    width: 104px;
+    height: 104px;
+    border-radius: 50%;
+    border: 3px solid #b99a62aa;
+    background: radial-gradient(circle at 35% 25%, #8498c2, #3f5f9f 70%, #304b83);
+    color: var(--cream);
+    box-shadow: 0 12px 25px #29364d45;
+    cursor: pointer;
+    margin-top: 28px;
+    transition: 0.25s;
+}
+
+.seal:hover {
+    transform: scale(1.07) rotate(-4deg);
+}
+.seal span { font: 27px "Great Vibes", cursive; }
+.hint {
+    font: 10px "Be Vietnam Pro", sans-serif;
+    letter-spacing: 0.12em;
+    opacity: 0.5;
+    margin-top: 10px;
+}
+
+
+/* =========================================
+   3. GIAO DIỆN CHÍNH (SỔ LƯU NIỆM)
+========================================= */
+#app {
+    width: min(1100px, 94vw);
+    margin: 25px auto 70px;
+}
+
+.top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font: 10px "Be Vietnam Pro", sans-serif;
+    letter-spacing: 0.12em;
+    color: #50627f;
+    margin-bottom: 14px;
+}
+
+.music {
+    border: 1px solid #3f5f9f55;
+    background: #f5eddfaa;
+    border-radius: 999px;
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+.page {
+    background: var(--cream);
+    box-shadow: 0 25px 70px #25375838;
+    border: 1px solid #b99a6280;
+    overflow: hidden;
+}
+
+/* Bố cục tiêu đề chính */
+.hero {
+    min-height: 650px;
+    padding: 85px 10%;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 40px;
+    align-items: center;
+}
+.hero h1 { font: 500 clamp(62px, 8vw, 96px) / 0.84 "Cormorant Garamond", serif; color: var(--blue); margin: 18px 0; }
+.hero p { font-size: 20px; line-height: 1.7; max-width: 600px; }
+.script { font: 46px "Great Vibes", cursive; color: var(--blue); }
+
+/* Trang trí hoa lá và ảnh bìa */
+.art { height: 370px; position: relative; }
+.flower { position: absolute; color: var(--blue); font-size: 80px; }
+.f1 { right: 20px; top: 20px; transform: rotate(-18deg); }
+.f2 { left: 20px; bottom: 20px; font-size: 62px; transform: rotate(20deg); }
+
+.polaroid {
+    position: absolute;
+    right: 10%;
+    top: 55px;
+    width: 250px;
+    background: #fffaf1;
+    padding: 13px 13px 42px;
+    box-shadow: 0 18px 35px #29364d30;
+    transform: rotate(6deg);
+}
+/* CSS cho ảnh bìa polaroid đã được cập nhật */
+.photo {
+    height: 235px;
+    width: 100%;
+    object-fit: cover;
+    display: block;
+}
+.polaroid small { position: absolute; bottom: 11px; left: 0; right: 0; text-align: center; font: 14px "Great Vibes", cursive; }
+
+/* Khu vực phần nội dung chung */
+.section { padding: 85px 10%; }
+.orn { text-align: center; color: var(--gold); letter-spacing: 0.5em; margin-bottom: 15px; }
+.section h2 { font: 500 55px "Cormorant Garamond", serif; color: var(--blue); margin: 8px 0; }
+.intro { font-size: 20px; line-height: 1.5; max-width: 650px; }
+
+/* Thiết kế tờ giấy thư */
+.letter {
+    max-width: 750px;
+    margin: 38px auto 0;
+    background: var(--paper);
+    padding: 58px 9%;
+    box-shadow: 0 15px 35px #29364d1b;
+}
+.letter h3 { font: 600 42px Lora, serif; color: var(--blue); margin: 0 0 20px; }
+.letter p { font: 20px/1.9 Lora, serif; }
+.quote {
+    border-left: 2px solid var(--gold);
+    border-right: 2px solid var(--gold);
+    padding: 18px 25px;
+    text-align: center;
+    font: italic 22px/1.6 Lora, serif;
+    color: var(--blue);
+    margin: 28px 0;
+}
+
+/* Các thẻ ảnh lật ngược 3D */
+.memories { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 40px; }
+.card { height: 325px; perspective: 900px; cursor: pointer; }
+.inner { height: 100%; position: relative; transition: 0.7s; transform-style: preserve-3d; }
+.card.flip .inner { transform: rotateY(180deg); }
+.face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    background: #fffaf1;
+    padding: 14px;
+    box-shadow: 0 16px 32px #29364d24;
+}
+.back {
+    transform: rotateY(180deg);
+    display: grid;
+    place-items: center;
+    text-align: center;
+    padding: 35px;
+    background: #f0e5d3;
+}
+.back p { font: 22px/1.5 Lora, serif; color: var(--blue); }
+.caption { text-align: center; padding: 10px; font-size: 17px; }
+
+/* Thông điệp bí mật */
+.reveal { text-align: center; margin: 42px auto; max-width: 700px; }
+.reveal button, .restart { border: 1px solid var(--blue); background: transparent; padding: 12px 25px; cursor: pointer; }
+.secret { opacity: 0; transform: translateY(10px); transition: 0.7s; margin-top: 24px; font-size: 22px; color: var(--blue); }
+.secret.show { opacity: 1; transform: none; }
+
+/* Phần Footer */
+.final {
+    text-align: center;
+    padding: 100px 10%;
+    background: linear-gradient(#f5eddf, #e9dfcc);
+}
+.final h2 { font: 500 68px "Cormorant Garamond", serif; color: var(--blue); margin: 10px 0; }
+.final p { font: 21px/1.7 Lora, serif; max-width: 650px; margin: 0 auto 28px; }
+.footer { font: 10px "Be Vietnam Pro", sans-serif; letter-spacing: 0.15em; opacity: 0.5; margin-top: 50px; }
+.restart { margin-top: 20px; text-decoration: underline; text-underline-offset: 4px; border: 0; }
+
+/* Hiệu ứng cánh hoa rơi */
+.petals { position: fixed; inset: 0; pointer-events: none; z-index: 400; overflow: hidden; }
+.petal {
+    position: absolute;
+    top: -30px;
+    width: 12px;
+    height: 20px;
+    border-radius: 80% 20% 80% 20%;
+    background: #5574aeaa;
+    animation: fall linear forwards;
+}
+@keyframes fall {
+    to { transform: translate3d(var(--x), 110vh, 0) rotate(500deg); opacity: 0; }
+}
+
+
+/* =========================================
+   4. CHUYỂN CẢNH VẬT LÝ 3D (RÚT THƯ/CẤT THƯ)
+========================================= */
+#physicalTransition {
+    position: fixed; inset: 0; z-index: 350;
+    display: grid; place-items: center;
+    visibility: hidden; pointer-events: none;
+    perspective: 1400px;
+    background: rgba(41, 54, 77, 0.10);
+}
+#physicalTransition.run { visibility: visible; }
+
+/* Khung phong bì 3D */
+.physical-envelope {
+    position: relative;
+    width: min(760px, 82vw);
+    aspect-ratio: 1.55;
+    background: linear-gradient(145deg, #f4ead7, #e1ceb0);
+    border: 1px solid #b99a62aa;
+    box-shadow: 0 30px 80px #29364d3b;
+    transform: scale(0.78);
+    opacity: 0;
+}
+.physical-envelope:before {
+    content: ""; position: absolute; inset: 14px;
+    border: 1px solid #b99a6290; z-index: 20;
+}
+
+/* Mặt trước và Nắp phong bì */
+.env-front {
+    position: absolute; inset: 0;
+    background: linear-gradient(145deg, #f4ead7, #dfc9a8);
+    clip-path: polygon(0 100%, 50% 48%, 100% 100%);
+    z-index: 8;
+}
+.env-flap {
+    position: absolute; inset: 0 0 auto; height: 62%;
+    background: linear-gradient(145deg, #f8efdf, #e5d5bb);
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    transform-origin: 50% 0; z-index: 12;
+}
+
+/* Con dấu trên 3D envelope */
+.wax {
+    position: absolute; z-index: 22; left: 50%; top: 58%;
+    transform: translate(-50%, -50%);
+    width: 74px; height: 74px; border-radius: 50%;
+    display: grid; place-items: center; background: #3f5f9f;
+    color: #f5eddf; border: 3px solid #b99a62aa;
+    box-shadow: 0 7px 14px #29364d44; font-size: 25px;
+}
+
+/* Lá thư (Bị kéo ra / nhét vào) */
+.physical-letter {
+    position: absolute; z-index: 10;
+    left: 8%; right: 8%; top: 9%; height: 88%;
+    background: #f7f0e3; border: 1px solid #b99a6280;
+    box-shadow: 0 18px 35px #29364d33;
+    transform: translateY(48%);
+    transform-style: preserve-3d; overflow: hidden;
+}
+
+/* Nội dung giả lập bên trong lá thư 3D */
+.letter-content { position: absolute; inset: 0; padding: 11% 12%; z-index: 2; background: #f7f0e3; }
+.mini-title { text-align: center; color: #3f5f9f; font: 36px "Cormorant Garamond", serif; }
+.mini-rule { height: 1px; background: #b99a62; width: 55%; margin: 16px auto; }
+.mini-text { height: 8px; width: 76%; background: rgba(113, 136, 184, 0.2); border-radius: 8px; margin: 15px auto; }
+.mini-text.short { width: 52%; }
+
+/* Các mép gấp thư */
+.fold-panel {
+    position: absolute; left: 0; width: 100%; height: 50%; z-index: 4;
+    background: #f7f0e3; backface-visibility: hidden;
+}
+.fold-top { top: 0; transform-origin: bottom; }
+.fold-bottom { bottom: 0; transform-origin: top; }
+
+/* Chuỗi Animation: KHI MỞ THƯ (.opening) */
+#physicalTransition.opening .physical-envelope { animation: envAppear 0.7s both; }
+#physicalTransition.opening .env-flap { animation: openFlap 0.8s 0.35s both cubic-bezier(0.25, 0.75, 0.2, 1); }
+#physicalTransition.opening .wax { animation: waxAway 0.35s 0.15s both; }
+#physicalTransition.opening .physical-letter { animation: letterRise 1.15s 0.65s both cubic-bezier(0.2, 0.85, 0.2, 1); }
+#physicalTransition.opening { animation: zoomToScrap 0.8s 1.85s both; }
+
+/* Chuỗi Animation: KHI ĐÓNG THƯ (.closing) */
+#physicalTransition.closing .physical-envelope { animation: envAppear 0.65s both; }
+#physicalTransition.closing .physical-letter { animation: letterReturn 0.85s 0.25s both cubic-bezier(0.25, 0.8, 0.25, 1); }
+#physicalTransition.closing .fold-top { animation: foldTop 0.65s 1.05s both cubic-bezier(0.55, 0.1, 0.7, 0.1); }
+#physicalTransition.closing .fold-bottom { animation: foldBottom 0.65s 1.05s both cubic-bezier(0.55, 0.1, 0.7, 0.1); }
+#physicalTransition.closing .env-front { animation: frontCover 0.5s 1.65s both; }
+#physicalTransition.closing .env-flap { animation: closeFlap 0.8s 1.78s both cubic-bezier(0.25, 0.75, 0.2, 1); }
+#physicalTransition.closing .wax { animation: waxBack 0.35s 2.25s both; }
+#physicalTransition.closing { animation: zoomAway 0.8s 2.55s both; }
+
+/* Khai báo chi tiết keyframes */
+@keyframes envAppear { to { opacity: 1; transform: scale(1); } }
+@keyframes openFlap { to { transform: rotateX(175deg); } }
+@keyframes waxAway { to { opacity: 0; transform: translate(-50%, -50%) scale(0.2); } }
+@keyframes letterRise { 
+    0% { transform: translateY(48%); } 
+    70% { transform: translateY(-18%); } 
+    100% { transform: translateY(-95%); } 
+}
+@keyframes zoomToScrap { to { opacity: 0; transform: scale(1.35); } }
+@keyframes letterReturn { 
+    0% { transform: translateY(-95%) scale(1.12); } 
+    65% { transform: translateY(0) scale(1); } 
+    100% { transform: translateY(5%) scale(0.98); } 
+}
+@keyframes foldTop { to { transform: rotateX(-180deg); } }
+@keyframes foldBottom { to { transform: rotateX(180deg); } }
+@keyframes closeFlap { from { transform: rotateX(175deg); } to { transform: rotateX(0); } }
+@keyframes waxBack { 
+    from { opacity: 0; transform: translate(-50%, -50%) scale(0.2); } 
+    to { opacity: 1; transform: translate(-50%, -50%) scale(1); } 
+}
+@keyframes zoomAway { to { opacity: 0; transform: scale(0.72) translateY(20px); } }
+
+
+/* =========================================
+   5. REPONSIVE (MOBILE & TABLET)
+========================================= */
+@media (max-width: 760px) {
+    .hero { grid-template-columns: 1fr; padding: 65px 9%; }
+    .memories { grid-template-columns: 1fr; }
+    .section { padding: 65px 9%; }
+    .art { height: 320px; }
+}
+
+@media (max-width: 480px) {
+    .cover-inner { padding: 35px 25px; }
+    .cover-title { font-size: 62px; }
+    .hero h1 { font-size: 58px; }
+    .letter { padding: 45px 9%; }
+    .letter p { font-size: 18px; }
+    .final h2 { font-size: 52px; }
+    /* Responsive cho hiệu ứng 3D */
+    .physical-envelope { width: 88vw; }
+    .wax { width: 58px; height: 58px; font-size: 18px; }
+    .mini-title { font-size: 28px; }
+}
+    
+.secret-message{
+ position:fixed;left:50%;bottom:34px;
+ transform:translateX(-50%) translateY(18px);
+ font-family:"Lora",serif;font-size:20px;line-height:1.35;
+ text-align:center;color:#3f5f9f;background:#f5eddf;
+ padding:12px 24px;border:1px solid #b99a62aa;
+ box-shadow:0 8px 25px #29364d22;
+ opacity:0;visibility:hidden;pointer-events:none;z-index:220;
+ transition:opacity .9s ease,transform .9s ease;
+}
+.secret-message.show{
+ opacity:1;visibility:visible;
+ transform:translateX(-50%) translateY(0);
+}
+.tiny-secret{
+ position:fixed;right:18px;bottom:16px;
+ opacity:0;transform:translateY(8px);
+ font:12px "Lora",serif;color:#3f5f9f;
+ pointer-events:none;z-index:221;transition:.8s ease;
+}
+.tiny-secret.show{opacity:.72;transform:none}
+@media(max-width:480px){
+ .secret-message{width:calc(100vw - 36px);font-size:18px;bottom:20px}
+}
+
+</style>
+</head>
+<body>
+    
+   <!-- ==========================================
+         PHẦN 1: MÀN HÌNH CHỜ (PHONG BÌ BÊN NGOÀI)
+    =========================================== -->
+    <section id="intro">
+        <div class="cover-envelope">
+            <div class="cover-inner">
+                <div class="eyebrow">Một góc nhỏ</div>
+                <div class="cover-title">Dành<br>cho cậu.</div>
+                <div class="cover-sub">Mở ra nhé, có một điều nho nhỏ đang chờ!!.</div>
+                <button class="seal" id="open"><span>open</span></button>
+                <div class="hint">click the seal</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         PHẦN 2: NỘI DUNG SỔ LƯU NIỆM (ỨNG DỤNG CHÍNH)
+    =========================================== -->
+    <main id="app" class="hide">
+        <div class="top">
+            <span>17 · 08 · 2026</span>
+            <button class="music" id="music">♪ piano: off</button>
+        </div>
+        
+        <div class="page">
+            <section class="hero">
+                <div>
+                    <div class="eyebrow">một ít lời</div>
+                    <h1>Happy<br>birthday.</h1>
+                    <p>Tớ tuy không khéo tay gì, cơ mà tớ muốn thử dành làm ra một thứ gì đó dành cho cậu. Vậy nên đây là một góc nho nhỏ trên internet dành riêng cho cậu. </p>
+                    <div class="script">for PMinh</div>
+                </div>
+                <div class="art">
+                    <div class="flower f1">✿</div>
+                    <div class="flower f2">❀</div>
+                    <div class="polaroid">
+                        <!-- HTML cho ảnh bìa polaroid đã được cập nhật -->
+                        <img src="anh1.jpg" class="photo" alt="Ảnh Polaroid bìa">
+                        <small>Gửi cậu, bạn nhỏ 5 tủi</small>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="orn">✦ ❦ ✦</div>
+                <div class="eyebrow">một chiếc thư</div>
+                <div class="letter">
+                    <h3>Dear PMinh,</h3>
+                    <p>Thế là sắp đến sinh nhật cậu rồi!! Cậu có đang háo hức không nhờ? Đã nhận lời chúc nào chưa? </p>
+                    <p>Nghe bảo là trường nào đó ở Giảng Võ bào sinh viên mạnh lắm. Nên hi vọng năm nay trường nhè nhẹ cái tay một tí với bạn em còn không thì tăng học bổng để cho cậu ý bào lại nào. Cơ mà cũng phải chú ý sức khỏe đấy!</p>
+                    <div class="quote">Mong những ngày phía trước sẽ dịu dàng và đầy những điều đáng nhớ với bạn nhỏ 5 tủi này nhé!!!.</div>
+                    <p>Mập muốn gia hạn gói bạn bè thêm thật lâu thật lâuuuu!</p>
+                    <p>Chúc PMinh đón một tuổi mới bằng vô vàn những tuyệt với nhất! Hãy để cuộc hành trình này trở thành đường đến thành công nhớ! </p>
+                    <div class="script">from Mập</div>
+                </div>
+            </section>
+
+            <section class="section" style="background:#eee5d7">
+                <div class="orn">✦ ✿ ✦</div>
+                <div class="eyebrow">nhiều chút xinh </div>
+                <h2>Ai đây ta ơi?</h2>
+                <p class="intro">Bên sau ảnh có gì nhở? Bấm vào xem sao.</p>
+                <div class="memories">
+                    <div class="card">
+                        <div class="inner">
+                            <div class="face">
+                                <!-- HTML cho ảnh thẻ bộ nhớ 1 đã được cập nhật -->
+                                <img src="anh10.jpg" class="photo" alt="Một kỷ niệm đẹp 1">
+                                <div class="caption">✦ ✿ ✦</div>
+                            </div>
+                            <div class="face back"><p>“Trời se lạnh rùi, nhớ mặc ấm vào nhé!!.”</p></div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="inner">
+                            <div class="face">
+                                <!-- HTML cho ảnh thẻ bộ nhớ 2 đã được cập nhật -->
+                                <img src="anh3.jpg" class="photo" alt="Một kỷ niệm đẹp 2">
+                                <div class="caption">✦ ✿ ✦</div>
+                            </div>
+                            <div class="face back"><p>“May mắn ơi, chú ý bạn nhỏ một tí!!.”</p></div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="inner">
+                            <div class="face">
+                                <!-- HTML cho ảnh thẻ bộ nhớ 3 đã được cập nhật -->
+                                <img src="anh4.jpg" class="photo" alt="Một kỷ niệm đẹp 3">
+                                <div class="caption">✦ ✿ ✦</div>
+                            </div>
+                            <div class="face back"><p>“Hì hì :>  Cậu cười xinh lắm đó!”</p></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="final">
+                <div class="orn">✦ ❦ ✦</div>
+                <h2>See ya!</h2>
+                <p>Chúc cho một nhiệm kỳ mới của cậu có thật nhiều câu chuyện thú vị, những chuyến đi bất ngờ, những người tốt và những kỷ niệm đáng yêu.</p>
+                <div class="script">Happy Birthday</div>
+                <button class="restart" id="restart">↶ reseal</button>
+            </section>
+        </div>
+    </main>
+
+    <!-- ==========================================
+         PHẦN 3: LỚP PHỦ HIỆU ỨNG 3D (RÚT THƯ / CẤT THƯ)
+    =========================================== -->
+    <div id="physicalTransition" aria-hidden="true">
+        <div class="physical-envelope">
+            <div class="physical-letter">
+                <div class="fold-panel fold-top"></div>
+                <div class="fold-panel fold-bottom"></div>
+                <div class="letter-content">
+                    <div class="mini-title">A little letter</div>
+                    <div class="mini-rule"></div>
+                    <div class="mini-text"></div>
+                    <div class="mini-text"></div>
+                    <div class="mini-text short"></div>
+                </div>
+            </div>
+            <div class="env-front"></div>
+            <div class="env-flap"></div>
+            <div class="wax">✦</div>
+        </div>
+    </div>
+
+    <!-- Vùng chứa cánh hoa rơi -->
+    <audio id="birthdayMusic" preload="auto" loop>
+  <source src="nhac1.mp3" type="audio/mpeg">
+</audio>
+
+<div id="secretMessage" class="secret-message">
+  Luv u! ♡
+</div>
+
+<div id="tinySecret" class="tiny-secret">
+  ✦ you found the tiny one ✦
+</div>
+
+<div class="petals" id="petals"></div>
+
+    <!-- MÃ JAVASCRIPT XỬ LÝ TƯƠNG TÁC -->
+    <script>
+const intro = document.getElementById("intro");
+const app = document.getElementById("app");
+const petals = document.getElementById("petals");
+const audio = document.getElementById("birthdayMusic");
+const musicButton = document.getElementById("music");
+
+let openCount = 0;
+let lastOpenTime = 0;
+let secretUnlocked = false;
+
+function burst(n){
+  for(let i=0;i<n;i++){
+    const p = document.createElement("span");
+    p.className = "petal";
+    p.style.left = Math.random()*100 + "vw";
+    p.style.animationDuration = 4 + Math.random()*5 + "s";
+    p.style.animationDelay = Math.random()*1.2 + "s";
+    p.style.setProperty("--x", -160 + Math.random()*320 + "px");
+    petals.appendChild(p);
+    setTimeout(()=>p.remove(),10000);
+  }
+}
+
+/* =========================
+   MUSIC
+   Put your own MP3 here:
+   nhac1.mp3
+   ========================= */
+function playMusic(){
+  audio.volume = 0.35;
+  audio.play().then(()=>{
+    musicButton.textContent = "♪ music: on";
+  }).catch(()=>{
+    musicButton.textContent = "♪ click again to play";
+  });
+}
+
+function pauseMusic(){
+  audio.pause();
+  musicButton.textContent = "♪ music: off";
+}
+
+musicButton.onclick = () => {
+  if(audio.paused) playMusic();
+  else pauseMusic();
+};
+
+/* =========================
+   HIDDEN EASTER EGG #1
+   Open the letter 4 times.
+   ========================= */
+function countOpen(){
+  const now = Date.now();
+
+  if(now - lastOpenTime > 30000){
+    openCount = 0;
+  }
+
+  lastOpenTime = now;
+  openCount++;
+
+  if(openCount === 4 && !secretUnlocked){
+    secretUnlocked = true;
+
+    setTimeout(()=>{
+      document.getElementById("secretMessage").classList.add("show");
+      burst(12);
+    },1200);
+  }
+}
+
+/* =========================
+   OPEN LETTER
+   ========================= */
+document.getElementById("open").onclick = () => {
+  countOpen();
+
+  intro.style.opacity = "0";
+  intro.style.transform = "scale(.97) translateY(-15px)";
+
+  setTimeout(()=>{
+    intro.classList.add("hide");
+    app.classList.remove("hide");
+    burst(36);
+    scrollTo(0,0);
+
+    /* Starts only after the user's click, avoiding autoplay blocking. */
+    if(audio.paused) playMusic();
+  },700);
+};
+
+/* =========================
+   HIDDEN EASTER EGG #2
+   Hold the wax seal for 2 seconds.
+   ========================= */
+let holdTimer;
+const seal = document.getElementById("open");
+
+function startHold(){
+  clearTimeout(holdTimer);
+
+  holdTimer = setTimeout(()=>{
+    const tiny = document.getElementById("tinySecret");
+    tiny.textContent = "✦ you found the tiny one ✦";
+    tiny.classList.add("show");
+    burst(5);
+  },2000);
+}
+
+function cancelHold(){
+  clearTimeout(holdTimer);
+}
+
+seal.addEventListener("mousedown", startHold);
+seal.addEventListener("mouseup", cancelHold);
+seal.addEventListener("mouseleave", cancelHold);
+seal.addEventListener("touchstart", startHold, {passive:true});
+seal.addEventListener("touchend", cancelHold);
+
+/* =========================
+   MEMORY CARDS
+   ========================= */
+document.querySelectorAll(".card").forEach(card=>{
+  card.onclick = () => card.classList.toggle("flip");
+});
+
+/* =========================
+   SECRET NOTE
+   ========================= */
+const revealBtn = document.getElementById("reveal");
+if (revealBtn) {
+  revealBtn.onclick = function(){
+    const secretMsg = document.getElementById("secret");
+    if(secretMsg) secretMsg.classList.add("show");
+    this.textContent = "the note is yours ♡";
+    burst(12);
+  };
+}
+
+/* =========================
+   RETURN TO ENVELOPE
+   ========================= */
+const restartBtn = document.getElementById("restart");
+if (restartBtn) {
+  restartBtn.onclick = () => {
+    app.classList.add("hide");
+    intro.classList.remove("hide");
+    intro.style.opacity = "1";
+    intro.style.transform = "none";
+    scrollTo(0,0);
+  };
+}
+/* =========================
+   HIDDEN EASTER EGG #3
+   Double-click the small top date/archive text.
+   ========================= */
+const topDate = document.querySelector(".top span");
+
+if(topDate){
+  topDate.addEventListener("dblclick",()=>{
+    const tiny = document.getElementById("tinySecret");
+
+    tiny.textContent = "✦ there are more secrets here ✦";
+    tiny.classList.add("show");
+
+    setTimeout(()=>{
+      tiny.classList.remove("show");
+    },3500);
+  });
+}
+</script>
+</body>
+</html>
